@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16274A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Civics 128">
+<title>Civics 128</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Public+Sans:wght@400;600;700&display=swap">
+<style>
+/* Layout: one narrow column like a passport page; navy cover band on top, tab bar at the bottom. */
+:root{
+  --paper:#F2F4F8; --card:#FFFFFF; --ink:#14203A; --muted:#5B6579; --line:#D8DDE7;
+  --cover:#16274A; --on-cover:#F2F4F8; --gold:#9C6E18; --gold-soft:#F4EBD6;
+  --good:#1D7448; --good-bg:#E3F2EA; --bad:#AE2A20; --bad-bg:#FBE8E5;
+  --display:"Libre Caslon Display","Libre Caslon Text",Georgia,"Times New Roman",serif;
+  --text:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --r:12px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0C1322; --card:#141E33; --ink:#E7ECF5; --muted:#98A3B8; --line:#26324D;
+  --cover:#0F1A31; --on-cover:#E7ECF5; --gold:#D9B160; --gold-soft:#2C2416;
+  --good:#63C995; --good-bg:#11301F; --bad:#F2897E; --bad-bg:#3A1613; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0C1322; --card:#141E33; --ink:#E7ECF5; --muted:#98A3B8; --line:#26324D;
+  --cover:#0F1A31; --on-cover:#E7ECF5; --gold:#D9B160; --gold-soft:#2C2416;
+  --good:#63C995; --good-bg:#11301F; --bad:#F2897E; --bad-bg:#3A1613; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font:16px/1.5 var(--text);-webkit-text-size-adjust:100%;padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--cover)}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+.cover{background:var(--cover);color:var(--on-cover);border-bottom:3px solid var(--gold)}
+.wrap{max-width:640px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.cover .wrap{padding-block:18px 16px;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.brand{font-family:var(--display);font-size:1.75rem;line-height:1;letter-spacing:.01em;margin:0;font-weight:400}
+.brand span{color:var(--gold)}
+.cover small{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+
+main.wrap{padding-block:20px 24px;display:flex;flex-direction:column;gap:18px}
+h2{font-family:var(--display);font-weight:400;font-size:1.6rem;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0;font-weight:700}
+p{margin:0}
+.muted{color:var(--muted)}
+.small{font-size:.875rem}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:12px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.rules div{display:flex;flex-direction:column;gap:2px}
+.rules b{font-family:var(--display);font-weight:400;font-size:2rem;line-height:1;font-variant-numeric:lining-nums tabular-nums}
+.rules span{font-size:.75rem;color:var(--muted)}
+
+.actions{display:grid;gap:12px}
+.action{display:flex;flex-direction:column;gap:4px;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:var(--r);padding:16px 18px;position:relative}
+.action.primary{background:var(--cover);color:var(--on-cover);border-color:var(--cover)}
+.action strong{font-family:var(--display);font-weight:400;font-size:1.4rem}
+.action span{font-size:.9rem;opacity:.85}
+.action::after{content:"→";position:absolute;right:18px;top:18px;font-size:1.2rem;color:var(--gold)}
+
+.seg{display:flex;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{flex:1;border:0;background:none;border-radius:999px;padding:8px 10px;font-size:.9rem;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;font-size:.85rem}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+/* Quiz */
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.85rem;color:var(--muted)}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--gold);transition:width .3s}
+.tally{display:flex;gap:10px;font-variant-numeric:tabular-nums;font-weight:600}
+.tally .ok{color:var(--good)} .tally .no{color:var(--bad)}
+.qtag{display:inline-flex;gap:8px;align-items:center;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.qtext{font-family:var(--display);font-size:1.55rem;line-height:1.25;text-wrap:balance}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;border:1.5px solid var(--line);background:var(--card);border-radius:var(--r);padding:14px;min-height:52px;line-height:1.35}
+.opt kbd{font:700 .8rem var(--text);border:1px solid var(--line);border-radius:6px;min-width:26px;height:26px;display:inline-grid;place-items:center;color:var(--muted);flex:none}
+.opt.right{border-color:var(--good);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt:disabled{cursor:default;opacity:1}
+.opt.dim{opacity:.55}
+.feedback{border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:8px;border:1px solid var(--line);background:var(--card)}
+.feedback.good{border-color:var(--good)} .feedback.bad{border-color:var(--bad)}
+.feedback .verdict{font-weight:700}
+.feedback.good .verdict{color:var(--good)} .feedback.bad .verdict{color:var(--bad)}
+.accepted{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:2px}
+.note{background:var(--gold-soft);border-radius:8px;padding:10px 12px;font-size:.85rem}
+.btn{border:0;border-radius:999px;padding:14px 20px;font-weight:700;background:var(--ink);color:var(--paper);font-size:1rem}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.good{background:var(--good);color:var(--card)} .btn.bad{background:var(--bad);color:var(--card)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row .btn{flex:1 1 140px}
+
+/* Results */
+.verdict-big{font-family:var(--display);font-size:2.6rem;line-height:1}
+.verdict-big.pass{color:var(--good)} .verdict-big.fail{color:var(--bad)}
+.log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.log li{display:flex;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:.92rem}
+.log li:first-child{border-top:0}
+.mark{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:.75rem;font-weight:700;color:var(--card)}
+.mark.ok{background:var(--good)} .mark.no{background:var(--bad)}
+.log .num{color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* Study list */
+.search{width:100%;padding:12px 14px;border-radius:var(--r);border:1px solid var(--line);background:var(--card)}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.qcard .top{display:flex;justify-content:space-between;gap:8px;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.qcard .qt{font-weight:600}
+.qcard ul{margin:0;padding-left:1.1em;color:var(--muted);font-size:.92rem}
+.pill{border-radius:999px;padding:2px 8px;font-size:.7rem;letter-spacing:.06em}
+.pill.m{background:var(--good-bg);color:var(--good)} .pill.w{background:var(--bad-bg);color:var(--bad)} .pill.n{background:var(--paper);color:var(--muted)}
+.pill.live{background:var(--gold-soft);color:var(--gold)}
+
+/* Progress */
+.meter{display:flex;flex-direction:column;gap:6px}
+.meter .lbl{display:flex;justify-content:space-between;font-size:.9rem;font-variant-numeric:tabular-nums}
+.big{font-family:var(--display);font-size:3rem;line-height:1;font-variant-numeric:lining-nums tabular-nums}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:.85rem;font-weight:600}
+.field input{padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper)}
+
+/* Tab bar */
+.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);z-index:5;padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabs .wrap{display:grid;grid-template-columns:repeat(3,1fr)}
+.tabs button{border:0;background:none;padding:12px 4px 14px;font-size:.8rem;font-weight:600;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px}
+.tabs button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8}
+.tabs button[aria-current="page"]{color:var(--ink)}
+.tabs button[aria-current="page"] svg{stroke:var(--gold)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="cover"><div class="wrap"><h1 class="brand">Civics <span>128</span></h1><small>2025 USCIS civics test</small></div></header>
+<main class="wrap" id="view"></main>
+<nav class="tabs" aria-label="Sections"><div class="wrap">
+  <button data-tab="home"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg>Home</button>
+  <button data-tab="study"><svg viewBox="0 0 24 24"><path d="M4 5h6a2 2 0 012 2v13a2 2 0 00-2-2H4zM20 5h-6a2 2 0 00-2 2v13a2 2 0 012-2h6z"/></svg>All 128</button>
+  <button data-tab="progress"><svg viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Progress</button>
+</div></nav>
+<script>
+// 2025 USCIS Naturalization Civics Test: 128 questions (form M-1778, 09/25).
+// a = accepted answers (verbatim from USCIS). w = wrong options used for multiple choice.
+// k = how many items the question asks you to name. s = 65/20 asterisk. live = answer changes with elections.
+const QUESTIONS = [
+{n:1,q:"What is the form of government of the United States?",a:["Republic","Constitution-based federal republic","Representative democracy"],w:["Monarchy","Direct democracy","Confederation","Parliamentary monarchy"]},
+{n:2,s:1,q:"What is the supreme law of the land?",a:["(U.S.) Constitution"],w:["Declaration of Independence","Bill of Rights","Articles of Confederation","Federalist Papers"]},
+{n:3,q:"Name one thing the U.S. Constitution does.",a:["Forms the government","Defines powers of government","Defines the parts of government","Protects the rights of the people"],w:["Declares independence from Britain","Establishes a national religion","Names the national anthem","Sets the price of goods"]},
+{n:4,q:"The U.S. Constitution starts with the words “We the People.” What does “We the People” mean?",a:["Self-government","Popular sovereignty","Consent of the governed","People should govern themselves","(Example of) social contract"],w:["The President speaks for the people","Only citizens can own land","The states control the government","The government chooses for the people"]},
+{n:5,q:"How are changes made to the U.S. Constitution?",a:["Amendments","The amendment process"],w:["Executive orders","Supreme Court rulings","Treaties","A decree from the President"]},
+{n:6,q:"What does the Bill of Rights protect?",a:["(The basic) rights of Americans","(The basic) rights of people living in the United States"],w:["The powers of the President","The powers of Congress","The rights of the states only","Trade between states"]},
+{n:7,s:1,q:"How many amendments does the U.S. Constitution have?",a:["Twenty-seven (27)"],w:["Ten (10)","Twenty-five (25)","Thirty-three (33)","Fifty (50)"]},
+{n:8,q:"Why is the Declaration of Independence important?",a:["It says America is free from British control.","It says all people are created equal.","It identifies inherent rights.","It identifies individual freedoms."],w:["It created the three branches of government.","It ended slavery.","It set up the Supreme Court.","It gave women the right to vote."]},
+{n:9,q:"What founding document said the American colonies were free from Britain?",a:["Declaration of Independence"],w:["U.S. Constitution","Articles of Confederation","Bill of Rights","Emancipation Proclamation"]},
+{n:10,k:2,q:"Name two important ideas from the Declaration of Independence and the U.S. Constitution.",a:["Equality","Liberty","Social contract","Natural rights","Limited government","Self-government"],w:["Monarchy","Rule by a king","A national religion","Military rule"]},
+{n:11,q:"The words “Life, Liberty, and the pursuit of Happiness” are in what founding document?",a:["Declaration of Independence"],w:["U.S. Constitution","Bill of Rights","Gettysburg Address","Federalist Papers"]},
+{n:12,s:1,q:"What is the economic system of the United States?",a:["Capitalism","Free market economy"],w:["Socialism","Communism","Feudalism","Command economy"]},
+{n:13,q:"What is the rule of law?",a:["Everyone must follow the law.","Leaders must obey the law.","Government must obey the law.","No one is above the law."],w:["The President makes all laws.","Laws apply only to citizens.","Judges are above the law.","The majority can ignore the law."]},
+{n:14,q:"Many documents influenced the U.S. Constitution. Name one.",a:["Declaration of Independence","Articles of Confederation","Federalist Papers","Anti-Federalist Papers","Virginia Declaration of Rights","Fundamental Orders of Connecticut","Mayflower Compact","Iroquois Great Law of Peace"],w:["Emancipation Proclamation","Gettysburg Address","Monroe Doctrine","Louisiana Purchase Treaty"]},
+{n:15,q:"There are three branches of government. Why?",a:["So one part does not become too powerful","Checks and balances","Separation of powers"],w:["So laws can be passed faster","So each state gets its own branch","So Congress can control the courts","To save money"]},
+{n:16,q:"Name the three branches of government.",a:["Legislative, executive, and judicial","Congress, president, and the courts"],w:["Federal, state, and local","Senate, House, and President","President, Cabinet, and Congress","Army, Navy, and Air Force"]},
+{n:17,q:"The President of the United States is in charge of which branch of government?",a:["Executive branch"],w:["Legislative branch","Judicial branch","State branch"]},
+{n:18,q:"What part of the federal government writes laws?",a:["(U.S.) Congress","(U.S. or national) legislature","Legislative branch"],w:["The President","The Supreme Court","The Cabinet","State governors"]},
+{n:19,q:"What are the two parts of the U.S. Congress?",a:["Senate and House (of Representatives)"],w:["Senate and Supreme Court","House and Cabinet","President and Vice President","Senate and the states"]},
+{n:20,s:1,q:"Name one power of the U.S. Congress.",a:["Writes laws","Declares war","Makes the federal budget"],w:["Vetoes bills","Appoints federal judges","Commands the military","Decides if a law is constitutional"]},
+{n:21,q:"How many U.S. senators are there?",a:["One hundred (100)"],w:["Fifty (50)","Four hundred thirty-five (435)","Two hundred (200)","Five hundred thirty-eight (538)"]},
+{n:22,q:"How long is a term for a U.S. senator?",a:["Six (6) years"],w:["Two (2) years","Four (4) years","Eight (8) years","For life"]},
+{n:23,live:1,q:"Who is one of your state’s U.S. senators now?",a:["Michael Bennet","John Hickenlooper"],w:["Jared Polis","Jeff Crank","Phil Weiser","Mike Johnson","Diana DeGette"]},
+{n:24,q:"How many voting members are in the House of Representatives?",a:["Four hundred thirty-five (435)"],w:["One hundred (100)","Five hundred thirty-five (535)","Fifty (50)","Two hundred seventy (270)"]},
+{n:25,q:"How long is a term for a member of the House of Representatives?",a:["Two (2) years"],w:["Four (4) years","Six (6) years","One (1) year"]},
+{n:26,q:"Why do U.S. representatives serve shorter terms than U.S. senators?",a:["To more closely follow public opinion"],w:["To save money on elections","Because the House has fewer duties","So senators can supervise them","Because the Constitution limits them to one term"]},
+{n:27,q:"How many senators does each state have?",a:["Two (2)"],w:["One (1)","Three (3)","It depends on the state’s population"]},
+{n:28,q:"Why does each state have two senators?",a:["Equal representation (for small states)","The Great Compromise (Connecticut Compromise)"],w:["Because of the state’s population","Because each state has two political parties","To give the President more support","To match the number of governors"]},
+{n:29,live:1,q:"Name your U.S. representative.",a:["Jeff Crank"],w:["Michael Bennet","Jared Polis","Lauren Boebert","Diana DeGette","John Hickenlooper"]},
+{n:30,s:1,live:1,q:"What is the name of the Speaker of the House of Representatives now?",a:["Mike Johnson"],w:["Hakeem Jeffries","Nancy Pelosi","John Thune","Kevin McCarthy"]},
+{n:31,q:"Who does a U.S. senator represent?",a:["Citizens of their state","People of their state"],w:["Citizens in their congressional district","Only people in their party","Only people who voted for them","The President"]},
+{n:32,q:"Who elects U.S. senators?",a:["Citizens from their state"],w:["State legislatures","The House of Representatives","The President","The Electoral College"]},
+{n:33,q:"Who does a member of the House of Representatives represent?",a:["Citizens in their (congressional) district","Citizens in their district","People from their (congressional) district","People in their district"],w:["Citizens of the whole state","All Americans","State governors","The President"]},
+{n:34,q:"Who elects members of the House of Representatives?",a:["Citizens from their (congressional) district"],w:["Citizens from the whole state","The Senate","The governor","Political parties"]},
+{n:35,q:"Some states have more representatives than other states. Why?",a:["(Because of) the state’s population","(Because) they have more people","(Because) some states have more people"],w:["Because they are larger in land area","Because they are older states","Because they pay more taxes","Because the President decides"]},
+{n:36,s:1,q:"The President of the United States is elected for how many years?",a:["Four (4) years"],w:["Two (2) years","Six (6) years","Eight (8) years"]},
+{n:37,q:"The President of the United States can serve only two terms. Why?",a:["(Because of) the 22nd Amendment","To keep the president from becoming too powerful"],w:["Because of the 10th Amendment","Because the Supreme Court decided it","Because Congress votes on it every 8 years","Because of the 19th Amendment"]},
+{n:38,s:1,live:1,q:"What is the name of the President of the United States now?",a:["Donald Trump"],w:["Joe Biden","JD Vance","Barack Obama","Kamala Harris"]},
+{n:39,s:1,live:1,q:"What is the name of the Vice President of the United States now?",a:["JD Vance"],w:["Kamala Harris","Mike Pence","Marco Rubio","Mike Johnson"]},
+{n:40,q:"If the president can no longer serve, who becomes president?",a:["The Vice President (of the United States)"],w:["The Speaker of the House","The Chief Justice","The Secretary of State","The Senate Majority Leader"]},
+{n:41,q:"Name one power of the president.",a:["Signs bills into law","Vetoes bills","Enforces laws","Commander in Chief (of the military)","Chief diplomat","Appoints federal judges"],w:["Writes laws","Declares war","Makes the federal budget","Decides if a law is constitutional"]},
+{n:42,q:"Who is Commander in Chief of the U.S. military?",a:["The President (of the United States)"],w:["The Vice President","The Secretary of War (Defense)","The Chairman of the Joint Chiefs of Staff","The Speaker of the House"]},
+{n:43,q:"Who signs bills to become laws?",a:["The President (of the United States)"],w:["The Vice President","The Speaker of the House","The Chief Justice","The Senate"]},
+{n:44,s:1,q:"Who vetoes bills?",a:["The President (of the United States)"],w:["The Vice President","The Speaker of the House","The Supreme Court","The Senate"]},
+{n:45,q:"Who appoints federal judges?",a:["The President (of the United States)"],w:["The Senate","The Chief Justice","The Speaker of the House","The voters"]},
+{n:46,q:"The executive branch has many parts. Name one.",a:["President (of the United States)","Cabinet","Federal departments and agencies"],w:["Supreme Court","Senate","House of Representatives","Federal courts"]},
+{n:47,q:"What does the President’s Cabinet do?",a:["Advises the President (of the United States)"],w:["Writes laws","Elects the President","Decides court cases","Runs the state governments"]},
+{n:48,k:2,q:"What are two Cabinet-level positions?",a:["Attorney General","Secretary of Agriculture","Secretary of Commerce","Secretary of Education","Secretary of Energy","Secretary of Health and Human Services","Secretary of Homeland Security","Secretary of Housing and Urban Development","Secretary of the Interior","Secretary of Labor","Secretary of State","Secretary of Transportation","Secretary of the Treasury","Secretary of Veterans Affairs","Secretary of War (Defense)","Vice-President","Administrator of the Environmental Protection Agency","Administrator of the Small Business Administration","Director of the Central Intelligence Agency","Director of the Office of Management and Budget","Director of National Intelligence","United States Trade Representative"],w:["Speaker of the House","Chief Justice","Senate Majority Leader","Secretary of Immigration"]},
+{n:49,q:"Why is the Electoral College important?",a:["It decides who is elected president.","It provides a compromise between the popular election of the president and congressional selection."],w:["It writes federal laws.","It chooses Supreme Court justices.","It elects U.S. senators.","It counts the census."]},
+{n:50,q:"What is one part of the judicial branch?",a:["Supreme Court","Federal Courts"],w:["Congress","The Cabinet","The Senate","Department of Justice"]},
+{n:51,q:"What does the judicial branch do?",a:["Reviews laws","Explains laws","Resolves disputes (disagreements) about the law","Decides if a law goes against the (U.S.) Constitution"],w:["Writes laws","Signs bills","Declares war","Collects taxes"]},
+{n:52,s:1,q:"What is the highest court in the United States?",a:["Supreme Court"],w:["Court of Appeals","Federal District Court","State Supreme Court","Congress"]},
+{n:53,q:"How many seats are on the Supreme Court?",a:["Nine (9)"],w:["Seven (7)","Five (5)","Twelve (12)","Thirteen (13)"]},
+{n:54,q:"How many Supreme Court justices are usually needed to decide a case?",a:["Five (5)"],w:["Nine (9)","Six (6)","Three (3)","Seven (7)"]},
+{n:55,q:"How long do Supreme Court justices serve?",a:["(For) life","Lifetime appointment","(Until) retirement"],w:["Ten (10) years","Six (6) years","Four (4) years","Until the next president takes office"]},
+{n:56,q:"Supreme Court justices serve for life. Why?",a:["To be independent (of politics)","To limit outside (political) influence"],w:["So Congress can control them","So they can run for president later","To save money on elections","Because the Constitution sets a 20-year term"]},
+{n:57,live:1,q:"Who is the Chief Justice of the United States now?",a:["John Roberts"],w:["Clarence Thomas","Amy Coney Barrett","Sonia Sotomayor","Merrick Garland"]},
+{n:58,q:"Name one power that is only for the federal government.",a:["Print paper money","Mint coins","Declare war","Create an army","Make treaties","Set foreign policy"],w:["Give a driver’s license","Provide schooling and education","Approve zoning and land use","Provide police"]},
+{n:59,q:"Name one power that is only for the states.",a:["Provide schooling and education","Provide protection (police)","Provide safety (fire departments)","Give a driver’s license","Approve zoning and land use"],w:["Print paper money","Declare war","Make treaties","Create an army"]},
+{n:60,q:"What is the purpose of the 10th Amendment?",a:["(It states that the) powers not given to the federal government belong to the states or to the people."],w:["It gave women the right to vote.","It ended slavery.","It protects freedom of speech.","It limits the president to two terms."]},
+{n:61,s:1,live:1,q:"Who is the governor of your state now?",a:["Jared Polis"],w:["Phil Weiser","Michael Bennet","John Hickenlooper","Jeff Crank"]},
+{n:62,live:1,q:"What is the capital of your state?",a:["Denver"],w:["Colorado Springs","Boulder","Pueblo","Aurora"]},
+{n:63,q:"There are four amendments to the U.S. Constitution about who can vote. Describe one of them.",a:["Citizens eighteen (18) and older (can vote).","You don’t have to pay (a poll tax) to vote.","Any citizen can vote. (Women and men can vote.)","A male citizen of any race (can vote)."],w:["Citizens sixteen (16) and older can vote.","Only property owners can vote.","You must pass a reading test to vote.","Only citizens born in the U.S. can vote."]},
+{n:64,q:"Who can vote in federal elections, run for federal office, and serve on a jury in the United States?",a:["Citizens","Citizens of the United States","U.S. citizens"],w:["Permanent residents","Anyone living in the United States","Anyone over 18","Visa holders"]},
+{n:65,k:3,q:"What are three rights of everyone living in the United States?",a:["Freedom of expression","Freedom of speech","Freedom of assembly","Freedom to petition the government","Freedom of religion","The right to bear arms"],w:["The right to vote in federal elections","The right to run for federal office","The right to serve on a jury","The right to a U.S. passport"]},
+{n:66,s:1,q:"What do we show loyalty to when we say the Pledge of Allegiance?",a:["The United States","The flag"],w:["The President","Your state","Congress","The military"]},
+{n:67,k:2,q:"Name two promises that new citizens make in the Oath of Allegiance.",a:["Give up loyalty to other countries","Defend the (U.S.) Constitution","Obey the laws of the United States","Serve in the military (if needed)","Serve (help, do important work for) the nation (if needed)","Be loyal to the United States"],w:["Vote in every election","Join a political party","Speak only English at home","Never travel abroad"]},
+{n:68,q:"How can people become United States citizens?",a:["Be born in the United States, under the conditions set by the 14th Amendment","Naturalize","Derive citizenship (under conditions set by Congress)"],w:["Buy property in the United States","Live in the United States for one year","Pay federal taxes for five years","Get a U.S. driver’s license"]},
+{n:69,k:2,q:"What are two examples of civic participation in the United States?",a:["Vote","Run for office","Join a political party","Help with a campaign","Join a civic group","Join a community group","Give an elected official your opinion (on an issue)","Contact elected officials","Support or oppose an issue or policy","Write to a newspaper"],w:["Buy a house","Watch the news","Travel abroad","Pay a parking ticket"]},
+{n:70,q:"What is one way Americans can serve their country?",a:["Vote","Pay taxes","Obey the law","Serve in the military","Run for office","Work for local, state, or federal government"],w:["Buy American products","Fly the flag every day","Move to another state","Join a sports team"]},
+{n:71,q:"Why is it important to pay federal taxes?",a:["Required by law","All people pay to fund the federal government","Required by the (U.S.) Constitution (16th Amendment)","Civic duty"],w:["It is required to get a passport","It is only required for citizens","It is required before you can vote","It is optional for most people"]},
+{n:72,q:"It is important for all men age 18 through 25 to register for the Selective Service. Name one reason why.",a:["Required by law","Civic duty","Makes the draft fair, if needed"],w:["To get a driver’s license","To vote in elections","To join a political party","To get a tax refund"]},
+{n:73,q:"The colonists came to America for many reasons. Name one.",a:["Freedom","Political liberty","Religious freedom","Economic opportunity","Escape persecution"],w:["To escape the Civil War","To find gold in California","To join the British army","To build railroads"]},
+{n:74,s:1,q:"Who lived in America before the Europeans arrived?",a:["American Indians","Native Americans"],w:["The British","The Spanish","The French","The Dutch"]},
+{n:75,q:"What group of people was taken and sold as slaves?",a:["Africans","People from Africa"],w:["Native Americans","People from Europe","People from Asia","People from South America"]},
+{n:76,q:"What war did the Americans fight to win independence from Britain?",a:["American Revolution","The (American) Revolutionary War","War for (American) Independence"],w:["The Civil War","The War of 1812","The French and Indian War","The Mexican-American War"]},
+{n:77,q:"Name one reason why the Americans declared independence from Britain.",a:["High taxes","Taxation without representation","British soldiers stayed in Americans’ houses (boarding, quartering)","They did not have self-government","Boston Massacre","Boston Tea Party (Tea Act)","Stamp Act","Sugar Act","Townshend Acts","Intolerable (Coercive) Acts"],w:["The Civil War","The Louisiana Purchase","The Emancipation Proclamation","The War of 1812"]},
+{n:78,s:1,q:"Who wrote the Declaration of Independence?",a:["(Thomas) Jefferson"],w:["George Washington","Benjamin Franklin","James Madison","John Adams"]},
+{n:79,q:"When was the Declaration of Independence adopted?",a:["July 4, 1776"],w:["July 4, 1787","September 17, 1787","July 4, 1781","December 15, 1791"]},
+{n:80,q:"The American Revolution had many important events. Name one.",a:["(Battle of) Bunker Hill","Declaration of Independence","Washington Crossing the Delaware (Battle of Trenton)","(Battle of) Saratoga","Valley Forge (Encampment)","(Battle of) Yorktown (British surrender at Yorktown)"],w:["Battle of Gettysburg","Attack on Pearl Harbor","Surrender at Appomattox","Battle of New Orleans"]},
+{n:81,k:5,q:"There were 13 original states. Name five.",a:["New Hampshire","Massachusetts","Rhode Island","Connecticut","New York","New Jersey","Pennsylvania","Delaware","Maryland","Virginia","North Carolina","South Carolina","Georgia"],w:["Vermont","Maine","Florida","Ohio","Kentucky","Tennessee","West Virginia"]},
+{n:82,q:"What founding document was written in 1787?",a:["(U.S.) Constitution"],w:["Declaration of Independence","Bill of Rights","Articles of Confederation","Emancipation Proclamation"]},
+{n:83,q:"The Federalist Papers supported the passage of the U.S. Constitution. Name one of the writers.",a:["(James) Madison","(Alexander) Hamilton","(John) Jay","Publius"],w:["Thomas Jefferson","George Washington","Benjamin Franklin","John Adams"]},
+{n:84,q:"Why were the Federalist Papers important?",a:["They helped people understand the (U.S.) Constitution.","They supported passing the (U.S.) Constitution."],w:["They declared independence from Britain.","They ended slavery.","They created the Bill of Rights.","They started the Revolutionary War."]},
+{n:85,q:"Benjamin Franklin is famous for many things. Name one.",a:["Founded the first free public libraries","First Postmaster General of the United States","Helped write the Declaration of Independence","Inventor","U.S. diplomat"],w:["First president of the United States","Father of the Constitution","General of the Continental Army","Wrote the Star-Spangled Banner"]},
+{n:86,s:1,q:"George Washington is famous for many things. Name one.",a:["“Father of Our Country”","First president of the United States","General of the Continental Army","President of the Constitutional Convention"],w:["Wrote the Declaration of Independence","Freed the slaves","Third president of the United States","Bought the Louisiana Territory"]},
+{n:87,q:"Thomas Jefferson is famous for many things. Name one.",a:["Writer of the Declaration of Independence","Third president of the United States","Doubled the size of the United States (Louisiana Purchase)","First Secretary of State","Founded the University of Virginia","Writer of the Virginia Statute on Religious Freedom"],w:["First president of the United States","“Father of the Constitution”","General of the Continental Army","First Secretary of the Treasury"]},
+{n:88,q:"James Madison is famous for many things. Name one.",a:["“Father of the Constitution”","Fourth president of the United States","President during the War of 1812","One of the writers of the Federalist Papers"],w:["First president of the United States","Writer of the Declaration of Independence","President during the Civil War","First Secretary of the Treasury"]},
+{n:89,q:"Alexander Hamilton is famous for many things. Name one.",a:["First Secretary of the Treasury","One of the writers of the Federalist Papers","Helped establish the First Bank of the United States","Aide to General George Washington","Member of the Continental Congress"],w:["Third president of the United States","Writer of the Declaration of Independence","President during the War of 1812","First Postmaster General"]},
+{n:90,q:"What territory did the United States buy from France in 1803?",a:["Louisiana Territory","Louisiana"],w:["Alaska","Florida","Texas","Oregon Territory"]},
+{n:91,q:"Name one war fought by the United States in the 1800s.",a:["War of 1812","Mexican-American War","Civil War","Spanish-American War"],w:["World War I","Korean War","American Revolution","Vietnam War"]},
+{n:92,q:"Name the U.S. war between the North and the South.",a:["The Civil War"],w:["The Revolutionary War","The War of 1812","The Mexican-American War","The Spanish-American War"]},
+{n:93,q:"The Civil War had many important events. Name one.",a:["(Battle of) Fort Sumter","Emancipation Proclamation","(Battle of) Vicksburg","(Battle of) Gettysburg","Sherman’s March","(Surrender at) Appomattox","(Battle of) Antietam/Sharpsburg","Lincoln was assassinated."],w:["Battle of Bunker Hill","Attack on Pearl Harbor","Boston Tea Party","Battle of Yorktown"]},
+{n:94,s:1,q:"Abraham Lincoln is famous for many things. Name one.",a:["Freed the slaves (Emancipation Proclamation)","Saved (or preserved) the Union","Led the United States during the Civil War","16th president of the United States","Delivered the Gettysburg Address"],w:["First president of the United States","Wrote the Declaration of Independence","Bought the Louisiana Territory","President during World War I"]},
+{n:95,q:"What did the Emancipation Proclamation do?",a:["Freed the slaves","Freed slaves in the Confederacy","Freed slaves in the Confederate states","Freed slaves in most Southern states"],w:["Gave women the right to vote","Ended the Revolutionary War","Created the Constitution","Bought land from France"]},
+{n:96,q:"What U.S. war ended slavery?",a:["The Civil War"],w:["The Revolutionary War","World War I","The War of 1812","The Mexican-American War"]},
+{n:97,q:"What amendment says all persons born or naturalized in the United States, and subject to the jurisdiction thereof, are U.S. citizens?",a:["14th Amendment"],w:["1st Amendment","10th Amendment","15th Amendment","19th Amendment"]},
+{n:98,q:"When did all men get the right to vote?",a:["After the Civil War","During Reconstruction","(With the) 15th Amendment","1870"],w:["1776","1920","After World War I","With the 19th Amendment"]},
+{n:99,q:"Name one leader of the women’s rights movement in the 1800s.",a:["Susan B. Anthony","Elizabeth Cady Stanton","Sojourner Truth","Harriet Tubman","Lucretia Mott","Lucy Stone"],w:["Martha Washington","Betsy Ross","Eleanor Roosevelt","Rosa Parks"]},
+{n:100,q:"Name one war fought by the United States in the 1900s.",a:["World War I","World War II","Korean War","Vietnam War","(Persian) Gulf War"],w:["Civil War","War of 1812","Revolutionary War","Mexican-American War"]},
+{n:101,q:"Why did the United States enter World War I?",a:["Because Germany attacked U.S. (civilian) ships","To support the Allied Powers (England, France, Italy, and Russia)","To oppose the Central Powers (Germany, Austria-Hungary, the Ottoman Empire, and Bulgaria)"],w:["Because Japan attacked Pearl Harbor","To stop the spread of communism","To force Iraq out of Kuwait","Because of the September 11 attacks"]},
+{n:102,q:"When did all women get the right to vote?",a:["1920","After World War I","(With the) 19th Amendment"],w:["1870","After the Civil War","With the 15th Amendment","1776"]},
+{n:103,q:"What was the Great Depression?",a:["Longest economic recession in modern history"],w:["A war between the North and the South","A period of very fast economic growth","A disease epidemic","A drought that only hit the Midwest"]},
+{n:104,q:"When did the Great Depression start?",a:["The Great Crash (1929)","Stock market crash of 1929"],w:["Attack on Pearl Harbor (1941)","End of World War I (1918)","Stock market crash of 1987","Start of the Civil War (1861)"]},
+{n:105,q:"Who was president during the Great Depression and World War II?",a:["(Franklin) Roosevelt"],w:["Theodore Roosevelt","Herbert Hoover","Harry Truman","Woodrow Wilson"]},
+{n:106,q:"Why did the United States enter World War II?",a:["(Bombing of) Pearl Harbor","Japanese attacked Pearl Harbor","To support the Allied Powers (England, France, and Russia)","To oppose the Axis Powers (Germany, Italy, and Japan)"],w:["Because Germany attacked U.S. ships in 1917","To stop the spread of communism","To force Iraq out of Kuwait","Because of the stock market crash"]},
+{n:107,q:"Dwight Eisenhower is famous for many things. Name one.",a:["General during World War II","President at the end of (during) the Korean War","34th president of the United States","Signed the Federal-Aid Highway Act of 1956 (Created the Interstate System)"],w:["President during the Great Depression","Freed the slaves","General in the Civil War","First Secretary of State"]},
+{n:108,q:"Who was the United States’ main rival during the Cold War?",a:["Soviet Union","USSR","Russia"],w:["China","Germany","Japan","Cuba"]},
+{n:109,q:"During the Cold War, what was one main concern of the United States?",a:["Communism","Nuclear war"],w:["Slavery","Terrorism","The Great Depression","British taxes"]},
+{n:110,q:"Why did the United States enter the Korean War?",a:["To stop the spread of communism"],w:["To force Iraq out of Kuwait","Because Japan attacked Pearl Harbor","Because of the September 11 attacks","To end slavery"]},
+{n:111,q:"Why did the United States enter the Vietnam War?",a:["To stop the spread of communism"],w:["To force Iraq out of Kuwait","Because Japan attacked Pearl Harbor","Because of the September 11 attacks","Because Germany attacked U.S. ships"]},
+{n:112,q:"What did the civil rights movement do?",a:["Fought to end racial discrimination"],w:["Fought for independence from Britain","Fought to end the Great Depression","Won women the vote in 1920","Fought communism in Asia"]},
+{n:113,s:1,q:"Martin Luther King, Jr. is famous for many things. Name one.",a:["Fought for civil rights","Worked for equality for all Americans","Worked to ensure that people would “not be judged by the color of their skin, but by the content of their character”"],w:["Freed the slaves","Wrote the Constitution","Led the Union army","Was a U.S. president"]},
+{n:114,q:"Why did the United States enter the Persian Gulf War?",a:["To force the Iraqi military from Kuwait"],w:["To stop the spread of communism","Because of the September 11 attacks","Because Japan attacked Pearl Harbor","To capture Osama bin Laden"]},
+{n:115,s:1,q:"What major event happened on September 11, 2001 in the United States?",a:["Terrorists attacked the United States","Terrorists took over two planes and crashed them into the World Trade Center in New York City","Terrorists took over a plane and crashed into the Pentagon in Arlington, Virginia","Terrorists took over a plane originally aimed at Washington, D.C., and crashed in a field in Pennsylvania"],w:["Japan attacked Pearl Harbor","The stock market crashed","A hurricane hit New York City","The Berlin Wall fell"]},
+{n:116,q:"Name one U.S. military conflict after the September 11, 2001 attacks.",a:["(Global) War on Terror","War in Afghanistan","War in Iraq"],w:["Korean War","Vietnam War","Persian Gulf War","Cold War"]},
+{n:117,q:"Name one American Indian tribe in the United States.",a:["Apache","Blackfeet","Cayuga","Cherokee","Cheyenne","Chippewa","Choctaw","Creek","Crow","Hopi","Huron","Inupiat","Lakota","Mohawk","Mohegan","Navajo","Oneida","Onondaga","Pueblo","Seminole","Seneca","Shawnee","Sioux","Teton","Tuscarora"],w:["Aztec","Inca","Maya","Zulu","Maori"]},
+{n:118,q:"Name one example of an American innovation.",a:["Light bulb","Automobile (cars, internal combustion engine)","Skyscrapers","Airplane","Assembly line","Landing on the moon","Integrated circuit (IC)"],w:["Printing press","Gunpowder","The compass","Paper"]},
+{n:119,q:"What is the capital of the United States?",a:["Washington, D.C."],w:["New York City","Philadelphia","Boston","Baltimore"]},
+{n:120,q:"Where is the Statue of Liberty?",a:["New York (Harbor)","Liberty Island","New Jersey","Near New York City","On the Hudson (River)"],w:["Washington, D.C.","Boston Harbor","San Francisco Bay","Philadelphia"]},
+{n:121,s:1,q:"Why does the flag have 13 stripes?",a:["(Because there were) 13 original colonies","(Because the stripes) represent the original colonies"],w:["One stripe for each state","Because of the 13th Amendment","For the 13 battles of the Revolution","For the first 13 presidents"]},
+{n:122,q:"Why does the flag have 50 stars?",a:["(Because there is) one star for each state","(Because) each star represents a state","(Because there are) 50 states"],w:["For the 50 original colonies","For the first 50 presidents","For the 50 senators","For 50 amendments"]},
+{n:123,q:"What is the name of the national anthem?",a:["The Star-Spangled Banner"],w:["America the Beautiful","God Bless America","My Country, ’Tis of Thee","Yankee Doodle"]},
+{n:124,q:"The Nation’s first motto was “E Pluribus Unum.” What does that mean?",a:["Out of many, one","We all become one"],w:["In God we trust","Liberty and justice for all","Land of the free","One nation under God"]},
+{n:125,q:"What is Independence Day?",a:["A holiday to celebrate U.S. independence (from Britain)","The country’s birthday"],w:["A holiday to honor soldiers who died in military service","A holiday for the end of the Civil War","A holiday to honor workers","The day the Constitution was signed"]},
+{n:126,s:1,k:3,q:"Name three national U.S. holidays.",a:["New Year’s Day","Martin Luther King, Jr. Day","Presidents Day (Washington’s Birthday)","Memorial Day","Juneteenth","Independence Day","Labor Day","Columbus Day","Veterans Day","Thanksgiving Day","Christmas Day"],w:["Halloween","Valentine’s Day","Flag Day","St. Patrick’s Day","Easter"]},
+{n:127,q:"What is Memorial Day?",a:["A holiday to honor soldiers who died in military service"],w:["A holiday to honor everyone who has served in the military","A holiday to celebrate U.S. independence","A holiday to honor workers","A holiday to honor presidents"]},
+{n:128,q:"What is Veterans Day?",a:["A holiday to honor people in the (U.S.) military","A holiday to honor people who have served (in the U.S. military)"],w:["A holiday to honor soldiers who died in military service","A holiday to honor workers","A holiday to celebrate the end of the Civil War","A holiday to honor presidents"]}
+];
+</script>
+<script>
+(function(){
+"use strict";
+const KEY = "civics128.v1";
+const AS_OF = "October 19, 2026";
+const PASS = 12, FAIL = 9, TEST_LEN = 20, PRACTICE_LEN = 10;
+const SECT = {gov:"American Government", hist:"American History", sym:"Symbols & Holidays"};
+const SUBS = [
+  [1,15,"Principles of Government"],[16,62,"System of Government"],[63,72,"Rights & Responsibilities"],
+  [73,89,"Colonial Period & Independence"],[90,99,"The 1800s"],[100,118,"Recent History"],
+  [119,124,"Symbols"],[125,128,"Holidays"]
+];
+const section = n => n<=72 ? "gov" : n<=118 ? "hist" : "sym";
+const subName = n => (SUBS.find(s=>n>=s[0]&&n<=s[1])||[0,0,""])[2];
+const byN = {}; QUESTIONS.forEach(q => byN[q.n] = q);
+
+// ---------- storage ----------
+function fresh(){ return {stats:{}, tests:[], local:{}, mode:"mc", topic:"all"}; }
+function load(){ try{ const r = JSON.parse(localStorage.getItem(KEY)); if(r) return Object.assign(fresh(), r); }catch(e){} return fresh(); }
+let S = load();
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+
+// ---------- helpers ----------
+const $ = sel => document.querySelector(sel);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+const sample = (a,k) => shuffle(a).slice(0,k);
+function answers(q){ const l = S.local[q.n]; return (q.live && l && l.length) ? l : q.a; }
+function stat(n){ return S.stats[n] || {seen:0,right:0,wrong:0,streak:0}; }
+const mastered = n => stat(n).streak >= 2;
+function status(n){ const s = stat(n); if(!s.seen) return "n"; if(s.streak>=2) return "m"; if(s.streak===0) return "w"; return "l"; }
+
+function record(q, ok){
+  const s = stat(q.n);
+  s.seen++; ok ? (s.right++, s.streak++) : (s.wrong++, s.streak=0);
+  s.last = Date.now(); S.stats[q.n] = s; save();
+}
+
+function weight(q){
+  const s = stat(q.n);
+  if(!s.seen) return 3;
+  if(s.streak===0) return 6;
+  if(s.streak>=3) return 0.4;
+  if(s.streak>=2) return 0.8;
+  return 2;
+}
+function weightedPick(pool, k){
+  const p = pool.slice(), out = [];
+  while(out.length<k && p.length){
+    const tot = p.reduce((t,q)=>t+weight(q),0);
+    let r = Math.random()*tot, i = 0;
+    for(; i<p.length; i++){ r -= weight(p[i]); if(r<=0) break; }
+    out.push(p.splice(Math.min(i,p.length-1),1)[0]);
+  }
+  return out;
+}
+
+function buildOptions(q){
+  const acc = answers(q), k = Math.min(q.k||1, acc.length);
+  const low = new Set(acc.map(a=>a.toLowerCase()));
+  const wrongPool = q.w.filter(w=>!low.has(w.toLowerCase()));
+  const opts = [];
+  if(k===1){
+    opts.push({t:sample(acc,1)[0], ok:true});
+    sample(wrongPool,3).forEach(t=>opts.push({t, ok:false}));
+  } else {
+    opts.push({t:sample(acc,k).join(" · "), ok:true});
+    const bad = sample(wrongPool,3);
+    bad.forEach(b=>{ opts.push({t:shuffle(sample(acc,k-1).concat([b])).join(" · "), ok:false}); });
+  }
+  return shuffle(opts);
+}
+
+// ---------- routing ----------
+let tab = "home", quiz = null;
+function go(t){ tab = t; quiz = t==="quiz" ? quiz : null; render(); window.scrollTo(0,0); }
+function setTabs(){
+  document.querySelectorAll(".tabs button").forEach(b=>{
+    const cur = b.dataset.tab === (tab==="quiz"||tab==="result" ? "home" : tab);
+    cur ? b.setAttribute("aria-current","page") : b.removeAttribute("aria-current");
+  });
+}
+function render(){
+  setTabs();
+  const v = $("#view");
+  if(tab==="home") v.innerHTML = homeView();
+  else if(tab==="quiz") v.innerHTML = quizView();
+  else if(tab==="result") v.innerHTML = resultView();
+  else if(tab==="study") v.innerHTML = studyView();
+  else if(tab==="progress") v.innerHTML = progressView();
+  if(tab==="study") filterStudy();
+}
+
+// ---------- home ----------
+function homeView(){
+  const m = QUESTIONS.filter(q=>mastered(q.n)).length;
+  const last = S.tests[S.tests.length-1];
+  const topics = [["all","All 128"],["gov","Government"],["hist","History"],["sym","Symbols & Holidays"]];
+  return `
+  <section class="panel">
+    <h3>Your interview</h3>
+    <div class="rules">
+      <div><b>20</b><span>questions asked</span></div>
+      <div><b>12</b><span>correct to pass</span></div>
+      <div><b>9</b><span>wrong and it stops</span></div>
+    </div>
+    <p class="small muted">The officer asks out loud and you answer from memory. There are no answer choices on the day, so finish with Interview mode.</p>
+  </section>
+
+  <div class="actions">
+    <button class="action primary" data-act="practice"><strong>Practice 10</strong><span>Ten questions with the answer explained after each. Weighted toward what you miss.</span></button>
+    <button class="action" data-act="test"><strong>Full sample test</strong><span>20 random questions from all 128. Stops at 12 right or 9 wrong, like the real one.</span></button>
+  </div>
+
+  <section class="panel">
+    <h3>How you answer</h3>
+    <div class="seg" role="group" aria-label="Answer mode">
+      <button data-mode="mc" aria-pressed="${S.mode==="mc"}">Multiple choice</button>
+      <button data-mode="oral" aria-pressed="${S.mode==="oral"}">Interview</button>
+    </div>
+    <p class="small muted">${S.mode==="mc" ? "Pick from four options. Best for learning the facts." : "Say your answer out loud, reveal the official answers, then mark yourself honestly."}</p>
+    <h3>Practice topic</h3>
+    <div class="chips">${topics.map(([k,l])=>`<button class="chip" data-topic="${k}" aria-pressed="${S.topic===k}">${l}</button>`).join("")}</div>
+  </section>
+
+  <section class="panel">
+    <div class="meter">
+      <div class="lbl"><span>Mastered</span><span>${m} of 128</span></div>
+      <div class="bar"><i style="width:${(m/128*100).toFixed(1)}%"></i></div>
+    </div>
+    <p class="small muted">${last ? `Last sample test: ${last.right} right, ${last.wrong} wrong. ${last.passed?"Passed.":"Not passed yet."}` : "No sample test yet. A question counts as mastered after two correct answers in a row."}</p>
+  </section>`;
+}
+
+// ---------- quiz ----------
+function startQuiz(kind){
+  let qs;
+  if(kind==="test") qs = sample(QUESTIONS, TEST_LEN);
+  else {
+    const pool = S.topic==="all" ? QUESTIONS : QUESTIONS.filter(q=>section(q.n)===S.topic);
+    qs = weightedPick(pool, PRACTICE_LEN);
+  }
+  quiz = {kind, mode:S.mode, qs, i:0, right:0, wrong:0, log:[], picked:null, revealed:false, opts:null};
+  quiz.opts = buildOptions(qs[0]);
+  tab = "quiz"; render(); window.scrollTo(0,0);
+}
+function quizDone(){
+  if(quiz.kind==="test") return quiz.right>=PASS || quiz.wrong>=FAIL || quiz.i>=quiz.qs.length;
+  return quiz.i>=quiz.qs.length;
+}
+function quizView(){
+  const q = quiz.qs[quiz.i], acc = answers(q);
+  const total = quiz.qs.length, num = quiz.i+1;
+  const answered = quiz.picked!==null || quiz.graded!==undefined;
+  const head = quiz.kind==="test"
+    ? `<span>Sample test · ${num} of up to ${total}</span><span class="tally"><span class="ok">✓ ${quiz.right}</span><span class="no">✗ ${quiz.wrong}</span></span>`
+    : `<span>Practice · ${num} of ${total}</span><span class="tally"><span class="ok">✓ ${quiz.right}</span><span class="no">✗ ${quiz.wrong}</span></span>`;
+  const pct = quiz.kind==="test" ? Math.min(100, quiz.right/PASS*100) : (quiz.i/total*100);
+  const k = q.k||1;
+  const liveNote = q.live ? `<p class="note">This answer changes with elections. Saved as of ${AS_OF}; check it before your interview.</p>` : "";
+
+  let body;
+  if(quiz.mode==="mc"){
+    body = `<div class="opts">${quiz.opts.map((o,i)=>{
+      let cls = "opt";
+      if(quiz.picked!==null){ if(o.ok) cls+=" right"; else if(i===quiz.picked) cls+=" wrong"; else cls+=" dim"; }
+      return `<button class="${cls}" data-opt="${i}" ${quiz.picked!==null?"disabled":""}><kbd>${"ABCD"[i]}</kbd><span>${esc(o.t)}</span></button>`;
+    }).join("")}</div>`;
+    if(k>1 && quiz.picked===null) body = `<p class="small muted">Pick the option where every item is correct.</p>` + body;
+  } else {
+    body = quiz.revealed ? "" : `<p class="muted">Say your answer out loud as if the officer just asked. ${k>1?`You need to name ${k}.`:""}</p><button class="btn" data-act="reveal">Show official answers</button>`;
+  }
+
+  let fb = "";
+  if(quiz.mode==="mc" && quiz.picked!==null){
+    const ok = quiz.opts[quiz.picked].ok;
+    fb = feedback(ok, acc, k);
+  } else if(quiz.mode==="oral" && quiz.revealed){
+    if(quiz.graded===undefined){
+      fb = `<div class="feedback"><span class="verdict">Official answers${k>1?` (name any ${k})`:""}</span>${list(acc)}</div>
+        <div class="row"><button class="btn good" data-grade="1">I said one of these</button><button class="btn bad" data-grade="0">I missed it</button></div>`;
+    } else fb = feedback(quiz.graded, acc, k);
+  }
+  const next = answered && quiz.graded!==null ? `<button class="btn" data-act="next">${isLast()?"See results":"Next question"}</button>` : "";
+
+  return `
+  <div class="qhead">${head}</div>
+  <div class="bar"><i style="width:${pct}%"></i></div>
+  <div class="qtag">Q. ${q.n} · ${esc(SECT[section(q.n)])}</div>
+  <p class="qtext">${esc(q.q)}</p>
+  ${liveNote}
+  ${body}
+  ${fb}
+  ${next}
+  <button class="btn ghost" data-act="quit">End and go home</button>`;
+}
+function list(acc){ return `<ul class="accepted">${acc.map(a=>`<li>${esc(a)}</li>`).join("")}</ul>`; }
+function feedback(ok, acc, k){
+  return `<div class="feedback ${ok?"good":"bad"}"><span class="verdict">${ok?"Correct":"Not quite"}</span>
+    <span class="small muted">USCIS accepts${k>1?` any ${k} of`:""}:</span>${list(acc)}</div>`;
+}
+function isLast(){
+  if(quiz.kind==="test") return quiz.right>=PASS || quiz.wrong>=FAIL || quiz.i+1>=quiz.qs.length;
+  return quiz.i+1>=quiz.qs.length;
+}
+function grade(ok){
+  const q = quiz.qs[quiz.i];
+  ok ? quiz.right++ : quiz.wrong++;
+  quiz.log.push({n:q.n, ok});
+  record(q, ok);
+}
+function nextQ(){
+  quiz.i++;
+  if(quizDone()){ finish(); return; }
+  quiz.picked = null; quiz.revealed = false; delete quiz.graded;
+  quiz.opts = buildOptions(quiz.qs[quiz.i]);
+  render(); window.scrollTo(0,0);
+}
+function finish(){
+  if(quiz.kind==="test"){
+    S.tests.push({d:Date.now(), right:quiz.right, wrong:quiz.wrong, asked:quiz.log.length, passed:quiz.right>=PASS, mode:quiz.mode});
+    if(S.tests.length>50) S.tests = S.tests.slice(-50);
+    save();
+  }
+  tab = "result"; render(); window.scrollTo(0,0);
+}
+
+// ---------- results ----------
+function resultView(){
+  const isTest = quiz.kind==="test";
+  const passed = quiz.right>=PASS;
+  let heading;
+  if(isTest) heading = `<p class="verdict-big ${passed?"pass":"fail"}">${passed?"Passed":"Not yet"}</p>
+    <p>${passed ? `You reached 12 correct after ${quiz.log.length} questions.` : quiz.wrong>=FAIL ? `The officer would stop at 9 wrong. You had ${quiz.right} right.` : `${quiz.right} right out of ${quiz.log.length}. You need 12.`}</p>`;
+  else heading = `<p class="verdict-big ${quiz.right>=8?"pass":"fail"}">${quiz.right} / ${quiz.log.length}</p>
+    <p>${quiz.wrong ? "The ones you missed will come up more often in your next practice round." : "Clean round. These move toward mastered."}</p>`;
+  return `
+  <section class="panel">${heading}<p class="small muted">${quiz.mode==="mc"?"Multiple choice":"Interview mode"}</p></section>
+  <div class="row"><button class="btn" data-act="${isTest?"test":"practice"}">${isTest?"Take another test":"Practice 10 more"}</button><button class="btn ghost" data-act="home">Home</button></div>
+  <section class="panel"><h3>Your answers</h3>
+    <ul class="log">${quiz.log.map(l=>{ const q=byN[l.n]; return `<li><span class="mark ${l.ok?"ok":"no"}">${l.ok?"✓":"✗"}</span><div><span class="num">Q. ${q.n}</span> ${esc(q.q)}${l.ok?"":`<div class="small muted">${esc(answers(q).slice(0,3).join(" · "))}</div>`}</div></li>`; }).join("")}</ul>
+  </section>`;
+}
+
+// ---------- study ----------
+let studyTopic = "all", studyQuery = "";
+function studyView(){
+  const topics = [["all","All"],["gov","Government"],["hist","History"],["sym","Symbols & Holidays"],["weak","Missed"]];
+  return `
+  <h2>All 128 questions</h2>
+  <p class="small muted">The official 2025 list with every answer USCIS accepts. Colorado answers are filled in for the state questions.</p>
+  <input class="search" id="study-search" type="search" placeholder="Search questions and answers" value="${esc(studyQuery)}" aria-label="Search">
+  <div class="chips">${topics.map(([k,l])=>`<button class="chip" data-stopic="${k}" aria-pressed="${studyTopic===k}">${l}</button>`).join("")}</div>
+  <div id="study-list" style="display:flex;flex-direction:column;gap:10px"></div>`;
+}
+function filterStudy(){
+  const ql = studyQuery.trim().toLowerCase();
+  const items = QUESTIONS.filter(q=>{
+    if(studyTopic==="weak"){ if(status(q.n)!=="w") return false; }
+    else if(studyTopic!=="all" && section(q.n)!==studyTopic) return false;
+    if(!ql) return true;
+    return (q.q+" "+answers(q).join(" ")).toLowerCase().includes(ql) || String(q.n)===ql;
+  });
+  const lbl = {n:["n","New"],m:["m","Mastered"],w:["w","Missed"],l:["n","Learning"]};
+  const box = $("#study-list"); if(!box) return;
+  box.innerHTML = items.length ? items.map(q=>{
+    const [c,t] = lbl[status(q.n)];
+    return `<article class="qcard"><div class="top"><span>Q. ${q.n} · ${esc(subName(q.n))}</span><span>${q.live?'<span class="pill live">Changes</span> ':""}<span class="pill ${c}">${t}</span></span></div>
+      <div class="qt">${esc(q.q)}</div><ul>${answers(q).map(a=>`<li>${esc(a)}</li>`).join("")}</ul></article>`;
+  }).join("") : `<p class="muted">${studyTopic==="weak"?"Nothing missed right now. Questions you get wrong show up here.":"No questions match that search."}</p>`;
+}
+
+// ---------- progress ----------
+function progressView(){
+  const m = QUESTIONS.filter(q=>mastered(q.n)).length;
+  const seen = QUESTIONS.filter(q=>stat(q.n).seen).length;
+  const meters = Object.keys(SECT).map(k=>{
+    const qs = QUESTIONS.filter(q=>section(q.n)===k), mm = qs.filter(q=>mastered(q.n)).length;
+    return `<div class="meter"><div class="lbl"><span>${SECT[k]}</span><span>${mm} / ${qs.length}</span></div><div class="bar"><i style="width:${(mm/qs.length*100).toFixed(1)}%"></i></div></div>`;
+  }).join("");
+  const weak = QUESTIONS.filter(q=>stat(q.n).wrong>0).sort((a,b)=>(stat(b.n).wrong-stat(b.n).right)-(stat(a.n).wrong-stat(a.n).right)).slice(0,8);
+  const tests = S.tests.slice(-8).reverse();
+  const live = QUESTIONS.filter(q=>q.live);
+  return `
+  <section class="panel">
+    <div style="display:flex;align-items:baseline;gap:10px"><span class="big">${m}</span><span class="muted">of 128 mastered · ${seen} seen</span></div>
+    ${meters}
+  </section>
+  <section class="panel"><h3>Sample tests</h3>
+    ${tests.length ? `<ul class="log">${tests.map(t=>`<li><span class="mark ${t.passed?"ok":"no"}">${t.passed?"✓":"✗"}</span><div>${t.right} right, ${t.wrong} wrong <span class="muted small">· ${new Date(t.d).toLocaleDateString(undefined,{month:"short",day:"numeric"})} · ${t.mode==="mc"?"multiple choice":"interview"}</span></div></li>`).join("")}</ul>` : `<p class="muted small">Take a full sample test to start your record.</p>`}
+  </section>
+  <section class="panel"><h3>Most missed</h3>
+    ${weak.length ? `<ul class="log">${weak.map(q=>{const s=stat(q.n);return `<li><span class="num">Q. ${q.n}</span><div>${esc(q.q)} <span class="muted small">· missed ${s.wrong}×</span></div></li>`;}).join("")}</ul>` : `<p class="muted small">Nothing missed yet.</p>`}
+  </section>
+  <section class="panel"><h3>Answers that change</h3>
+    <p class="small muted">Filled in for Colorado Springs (5th District) as of ${AS_OF}. Colorado elects a new governor on November 3, 2026, and Jared Polis leaves office in January 2027. Officers expect whoever is serving on your interview day, so check uscis.gov/citizenship/testupdates before you go. Separate several answers with commas.</p>
+    ${live.map(q=>`<div class="field"><label for="local-${q.n}">Q. ${q.n} ${esc(q.q)}</label><input id="local-${q.n}" data-local="${q.n}" value="${esc(answers(q).join(", "))}"></div>`).join("")}
+    <button class="btn ghost" data-act="resetlocal">Restore saved defaults</button>
+  </section>
+  <button class="btn ghost" data-act="reset" id="reset-btn">Erase all progress</button>`;
+}
+
+// ---------- events ----------
+let resetArmed = false;
+document.addEventListener("click", e=>{
+  const b = e.target.closest("button"); if(!b) return;
+  if(b.dataset.tab){ go(b.dataset.tab); return; }
+  if(b.dataset.mode){ S.mode = b.dataset.mode; save(); render(); return; }
+  if(b.dataset.topic){ S.topic = b.dataset.topic; save(); render(); return; }
+  if(b.dataset.stopic){ studyTopic = b.dataset.stopic; render(); return; }
+  if(b.dataset.opt!==undefined && quiz && quiz.picked===null){
+    quiz.picked = +b.dataset.opt; grade(quiz.opts[quiz.picked].ok); render(); return;
+  }
+  if(b.dataset.grade!==undefined && quiz){ quiz.graded = b.dataset.grade==="1"; grade(quiz.graded); render(); return; }
+  const act = b.dataset.act;
+  if(act==="practice") startQuiz("practice");
+  else if(act==="test") startQuiz("test");
+  else if(act==="reveal"){ quiz.revealed = true; quiz.graded = undefined; render(); }
+  else if(act==="next") nextQ();
+  else if(act==="quit" || act==="home") go("home");
+  else if(act==="resetlocal"){ S.local = {}; save(); render(); }
+  else if(act==="reset"){
+    if(!resetArmed){ resetArmed = true; b.textContent = "Tap again to erase everything"; b.classList.add("bad"); setTimeout(()=>{resetArmed=false; if(b.isConnected){b.textContent="Erase all progress"; b.classList.remove("bad");}},4000); }
+    else { resetArmed = false; const keep = S.local; S = fresh(); S.local = keep; save(); render(); }
+  }
+});
+document.addEventListener("input", e=>{
+  const t = e.target;
+  if(t.id==="study-search"){ studyQuery = t.value; filterStudy(); }
+  if(t.dataset && t.dataset.local){
+    const vals = t.value.split(",").map(s=>s.trim()).filter(Boolean);
+    if(vals.length) S.local[t.dataset.local] = vals; else delete S.local[t.dataset.local];
+    save();
+  }
+});
+document.addEventListener("keydown", e=>{
+  if(tab!=="quiz" || !quiz || e.target.tagName==="INPUT") return;
+  const i = "abcd".indexOf(e.key.toLowerCase());
+  if(quiz.mode==="mc" && i>=0 && quiz.picked===null && quiz.opts[i]){ quiz.picked=i; grade(quiz.opts[i].ok); render(); }
+  else if(e.key==="Enter" && document.querySelector('[data-act="next"]')) nextQ();
+});
+
+render();
+})();
+</script>
+</body>
+</html>
