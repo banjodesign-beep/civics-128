@@ -2,11 +2,20 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Civics 128</title>
+<meta name="description" content="Study the 2025 USCIS civics test: all 128 questions, practice, sample tests and mastery tracking.">
 <meta name="theme-color" content="#16274A">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Civics 128">
-<title>Civics 128</title>
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=11">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=11">
+<link rel="manifest" href="/manifest.webmanifest">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+</head>
+<body>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Public+Sans:wght@400;600;700&display=swap">
 <style>
 /* Layout: one narrow column like a passport page; navy cover band on top, tab bar at the bottom. */
@@ -131,14 +140,74 @@ p{margin:0}
 .tabs button[aria-current="page"]{color:var(--ink)}
 .tabs button[aria-current="page"] svg{stroke:var(--gold)}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+
+/* ---------- v1.1 additions ---------- */
+:root{ --red:#B22234; --series-a:#3A5A9A; --series-b:#9C6E18; --tip:#14203A; --on-tip:#F2F4F8 }
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){ --red:#F2897E; --series-a:#6E92DA; --series-b:#AD8636; --tip:#E7ECF5; --on-tip:#0C1322 }}
+:root[data-theme="dark"]{ --red:#F2897E; --series-a:#6E92DA; --series-b:#AD8636; --tip:#E7ECF5; --on-tip:#0C1322 }
+
+.tabs .wrap{grid-template-columns:repeat(4,1fr)}
+.cover{border-bottom:0;box-shadow:inset 0 -3px 0 var(--gold)}
+.cover::after{content:"";display:block;height:6px;background:repeating-linear-gradient(90deg,#B22234 0 22px,#F4F1EA 22px 44px)}
+
+/* Splash: always the night-sky look, whatever the theme */
+#splash{position:fixed;inset:0;z-index:50;background:#0E1A33;color:#F4F1EA;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  padding:calc(24px + env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px));
+  transition:opacity .5s ease, transform .5s ease}
+#splash.out{opacity:0;transform:scale(1.04);pointer-events:none}
+#splash canvas{position:absolute;inset:0;width:100%;height:100%}
+#splash .sp{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;margin-bottom:18vh}
+#splash .eyebrow{font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:#D9B160;font-weight:700;animation:rise .7s .2s both}
+#splash h1{font-family:var(--display);font-weight:400;font-size:clamp(3.4rem,17vw,6rem);line-height:.95;margin:0;letter-spacing:.01em;animation:rise .8s .35s both;text-shadow:0 2px 30px rgba(0,0,0,.45)}
+#splash h1 span{color:#D9B160}
+#splash p{max-width:30ch;font-size:1.02rem;opacity:.9;animation:rise .8s .55s both;text-wrap:balance}
+#splash button{margin-top:10px;border:0;border-radius:999px;padding:15px 34px;font-weight:700;font-size:1.05rem;background:#C8102E;color:#fff;box-shadow:0 0 0 3px rgba(244,241,234,.9),0 10px 30px rgba(200,16,46,.45);animation:rise .8s .75s both}
+#splash .stat{font-size:.82rem;opacity:.75;animation:rise .8s .9s both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:40}
+
+/* Keep going */
+.session{display:flex;justify-content:space-between;gap:8px;font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.action.more{background:var(--red);border-color:var(--red);color:#fff}
+.action.more::after{color:#fff}
+.action.more span{opacity:.92}
+
+/* Mastery */
+.hero-m{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;align-items:end}
+.hero-m .pct{font-family:var(--display);font-size:4.2rem;line-height:.85;font-variant-numeric:lining-nums tabular-nums}
+.hero-m .pct small{font-size:.45em}
+.lvl{display:inline-flex;align-items:center;gap:6px;align-self:start;justify-self:start;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--gold);background:var(--gold-soft);border-radius:999px;padding:4px 10px}
+.ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.ladder div{display:flex;flex-direction:column;gap:4px;font-size:.7rem;color:var(--muted);line-height:1.2}
+.ladder i{display:block;height:6px;border-radius:3px;background:var(--line)}
+.ladder .on i{background:var(--gold)} .ladder .here{color:var(--ink);font-weight:700}
+.delta{font-size:.9rem;font-variant-numeric:tabular-nums}
+.delta b{font-weight:700}
+.delta .up{color:var(--good)} .delta .down{color:var(--bad)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.8rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend .dot{width:9px;height:9px;border-radius:50%;background:var(--series-a)}
+.legend .ln{width:18px;height:2px;border-radius:1px;background:var(--series-b)}
+.legend .pass{width:18px;border-top:2px dashed var(--muted)}
+#mchart{position:relative;min-width:0}
+#mchart svg{display:block;width:100%;overflow:visible;touch-action:pan-y}
+#mtip{position:absolute;pointer-events:none;background:var(--tip);color:var(--on-tip);border-radius:8px;padding:7px 10px;font-size:.78rem;line-height:1.35;white-space:nowrap;transform:translate(-50%,-100%);margin-top:-12px;font-variant-numeric:tabular-nums}
+.sect-acc{display:flex;flex-direction:column;gap:10px}
+details.tbl summary{cursor:pointer;font-size:.85rem;font-weight:600}
+.tw{overflow-x:auto;margin-top:8px}
+.tw table{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-numeric:tabular-nums}
+.tw th,.tw td{text-align:left;padding:6px 8px;border-top:1px solid var(--line)}
+.tw th{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-top:0}
+.tw td:not(:first-child),.tw th:not(:first-child){text-align:right}
+.ver{text-align:center;font-size:.75rem;color:var(--muted)}
+@media (prefers-reduced-motion: reduce){#splash *{animation:none!important}}
 </style>
-</head>
-<body>
 <header class="cover"><div class="wrap"><h1 class="brand">Civics <span>128</span></h1><small>2025 USCIS civics test</small></div></header>
 <main class="wrap" id="view"></main>
 <nav class="tabs" aria-label="Sections"><div class="wrap">
   <button data-tab="home"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg>Home</button>
   <button data-tab="study"><svg viewBox="0 0 24 24"><path d="M4 5h6a2 2 0 012 2v13a2 2 0 00-2-2H4zM20 5h-6a2 2 0 00-2 2v13a2 2 0 012-2h6z"/></svg>All 128</button>
+  <button data-tab="mastery"><svg viewBox="0 0 24 24"><path d="M4 18l5-6 4 3 7-9"/><path d="M15 6h5v5"/></svg>Mastery</button>
   <button data-tab="progress"><svg viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Progress</button>
 </div></nav>
 <script>
@@ -293,9 +362,13 @@ const subName = n => (SUBS.find(s=>n>=s[0]&&n<=s[1])||[0,0,""])[2];
 const byN = {}; QUESTIONS.forEach(q => byN[q.n] = q);
 
 // ---------- storage ----------
-function fresh(){ return {stats:{}, tests:[], local:{}, mode:"mc", topic:"all"}; }
+function fresh(){ return {stats:{}, tests:[], local:{}, mode:"mc", topic:"all", rounds:[], base:null}; }
 function load(){ try{ const r = JSON.parse(localStorage.getItem(KEY)); if(r) return Object.assign(fresh(), r); }catch(e){} return fresh(); }
 let S = load();
+if(!S.base){
+  const b = Object.values(S.stats).reduce((t,s)=>{ t.r+=s.right||0; t.n+=(s.right||0)+(s.wrong||0); return t; },{r:0,n:0});
+  S.base = {r:b.r, n:b.n, d:Date.now()}; try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){}
+}
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 
 // ---------- helpers ----------
@@ -351,7 +424,7 @@ function buildOptions(q){
 
 // ---------- routing ----------
 let tab = "home", quiz = null;
-function go(t){ tab = t; quiz = t==="quiz" ? quiz : null; render(); window.scrollTo(0,0); }
+function go(t){ if(quiz && tab==="quiz") logRound(true); tab = t; quiz = t==="quiz" ? quiz : null; render(); window.scrollTo(0,0); }
 function setTabs(){
   document.querySelectorAll(".tabs button").forEach(b=>{
     const cur = b.dataset.tab === (tab==="quiz"||tab==="result" ? "home" : tab);
@@ -366,7 +439,9 @@ function render(){
   else if(tab==="result") v.innerHTML = resultView();
   else if(tab==="study") v.innerHTML = studyView();
   else if(tab==="progress") v.innerHTML = progressView();
+  else if(tab==="mastery") v.innerHTML = masteryView();
   if(tab==="study") filterStudy();
+  if(tab==="mastery") drawChart();
 }
 
 // ---------- home ----------
@@ -386,7 +461,7 @@ function homeView(){
   </section>
 
   <div class="actions">
-    <button class="action primary" data-act="practice"><strong>Practice 10</strong><span>Ten questions with the answer explained after each. Weighted toward what you miss.</span></button>
+    <button class="action primary" data-act="practice"><strong>Practice 10</strong><span>Ten questions with the answer explained after each. Keep going as long as you like. Weighted toward what you miss.</span></button>
     <button class="action" data-act="test"><strong>Full sample test</strong><span>20 random questions from all 128. Stops at 12 right or 9 wrong, like the real one.</span></button>
   </div>
 
@@ -418,7 +493,7 @@ function startQuiz(kind){
     const pool = S.topic==="all" ? QUESTIONS : QUESTIONS.filter(q=>section(q.n)===S.topic);
     qs = weightedPick(pool, PRACTICE_LEN);
   }
-  quiz = {kind, mode:S.mode, qs, i:0, right:0, wrong:0, log:[], picked:null, revealed:false, opts:null};
+  quiz = {kind, mode:S.mode, qs, i:0, right:0, wrong:0, log:[], picked:null, revealed:false, opts:null, round:1, sess:{right:0,wrong:0}, asked:new Set(qs.map(q=>q.n)), logged:false};
   quiz.opts = buildOptions(qs[0]);
   tab = "quiz"; render(); window.scrollTo(0,0);
 }
@@ -432,7 +507,7 @@ function quizView(){
   const answered = quiz.picked!==null || quiz.graded!==undefined;
   const head = quiz.kind==="test"
     ? `<span>Sample test · ${num} of up to ${total}</span><span class="tally"><span class="ok">✓ ${quiz.right}</span><span class="no">✗ ${quiz.wrong}</span></span>`
-    : `<span>Practice · ${num} of ${total}</span><span class="tally"><span class="ok">✓ ${quiz.right}</span><span class="no">✗ ${quiz.wrong}</span></span>`;
+    : `<span>Practice${quiz.round>1?` · Round ${quiz.round}`:""} · ${num} of ${total}</span><span class="tally"><span class="ok">✓ ${quiz.right}</span><span class="no">✗ ${quiz.wrong}</span></span>`;
   const pct = quiz.kind==="test" ? Math.min(100, quiz.right/PASS*100) : (quiz.i/total*100);
   const k = q.k||1;
   const liveNote = q.live ? `<p class="note">This answer changes with elections. Saved as of ${AS_OF}; check it before your interview.</p>` : "";
@@ -461,8 +536,9 @@ function quizView(){
   }
   const next = answered && quiz.graded!==null ? `<button class="btn" data-act="next">${isLast()?"See results":"Next question"}</button>` : "";
 
+  const sessLine = quiz.round>1 ? `<div class="session"><span>This session</span><span>${quiz.sess.right} right · ${quiz.sess.wrong} wrong · ${pctOf(quiz.sess.right, quiz.sess.right+quiz.sess.wrong)}%</span></div>` : "";
   return `
-  <div class="qhead">${head}</div>
+  <div class="qhead">${head}</div>${sessLine}
   <div class="bar"><i style="width:${pct}%"></i></div>
   <div class="qtag">Q. ${q.n} · ${esc(SECT[section(q.n)])}</div>
   <p class="qtext">${esc(q.q)}</p>
@@ -483,7 +559,7 @@ function isLast(){
 }
 function grade(ok){
   const q = quiz.qs[quiz.i];
-  ok ? quiz.right++ : quiz.wrong++;
+  ok ? (quiz.right++, quiz.sess.right++) : (quiz.wrong++, quiz.sess.wrong++);
   quiz.log.push({n:q.n, ok});
   record(q, ok);
 }
@@ -494,7 +570,27 @@ function nextQ(){
   quiz.opts = buildOptions(quiz.qs[quiz.i]);
   render(); window.scrollTo(0,0);
 }
+function logRound(partial){
+  if(!quiz || quiz.logged || !quiz.log.length) return;
+  if(partial && quiz.log.length<3) return;
+  quiz.logged = true;
+  S.rounds.push({d:Date.now(), r:quiz.right, w:quiz.wrong, kind:quiz.kind, mode:quiz.mode});
+  if(S.rounds.length>600) S.rounds = S.rounds.slice(-600);
+  save();
+}
+function keepGoing(){
+  const pool = S.topic==="all" ? QUESTIONS : QUESTIONS.filter(q=>section(q.n)===S.topic);
+  const fresh = pool.filter(q=>!quiz.asked.has(q.n));
+  const qs = weightedPick(fresh.length>=PRACTICE_LEN ? fresh : pool, PRACTICE_LEN);
+  qs.forEach(q=>quiz.asked.add(q.n));
+  Object.assign(quiz, {qs, i:0, right:0, wrong:0, log:[], picked:null, revealed:false, logged:false, round:quiz.round+1});
+  delete quiz.graded;
+  quiz.opts = buildOptions(qs[0]);
+  tab = "quiz"; render(); window.scrollTo(0,0);
+}
 function finish(){
+  logRound(false);
+  if((quiz.kind==="test" && quiz.right>=PASS) || (quiz.kind!=="test" && quiz.wrong===0 && quiz.log.length>=PRACTICE_LEN)) setTimeout(celebrate, 150);
   if(quiz.kind==="test"){
     S.tests.push({d:Date.now(), right:quiz.right, wrong:quiz.wrong, asked:quiz.log.length, passed:quiz.right>=PASS, mode:quiz.mode});
     if(S.tests.length>50) S.tests = S.tests.slice(-50);
@@ -514,7 +610,10 @@ function resultView(){
     <p>${quiz.wrong ? "The ones you missed will come up more often in your next practice round." : "Clean round. These move toward mastered."}</p>`;
   return `
   <section class="panel">${heading}<p class="small muted">${quiz.mode==="mc"?"Multiple choice":"Interview mode"}</p></section>
-  <div class="row"><button class="btn" data-act="${isTest?"test":"practice"}">${isTest?"Take another test":"Practice 10 more"}</button><button class="btn ghost" data-act="home">Home</button></div>
+  ${isTest ? `<div class="row"><button class="btn" data-act="test">Take another test</button><button class="btn ghost" data-act="home">Home</button></div>`
+    : `${quiz.round>1?`<section class="panel"><h3>This session</h3><p><span class="big" style="font-size:2.2rem">${pctOf(quiz.sess.right, quiz.sess.right+quiz.sess.wrong)}%</span> <span class="muted">${quiz.sess.right} of ${quiz.sess.right+quiz.sess.wrong} right over ${quiz.round} rounds</span></p></section>`:""}
+    <button class="action more" data-act="more"><strong>Keep going</strong><span>Ten more, starting with ones you haven't seen this session.</span></button>
+    <div class="row"><button class="btn ghost" data-act="mastery">See my mastery</button><button class="btn ghost" data-act="home">Done for now</button></div>`}
   <section class="panel"><h3>Your answers</h3>
     <ul class="log">${quiz.log.map(l=>{ const q=byN[l.n]; return `<li><span class="mark ${l.ok?"ok":"no"}">${l.ok?"✓":"✗"}</span><div><span class="num">Q. ${q.n}</span> ${esc(q.q)}${l.ok?"":`<div class="small muted">${esc(answers(q).slice(0,3).join(" · "))}</div>`}</div></li>`; }).join("")}</ul>
   </section>`;
@@ -575,7 +674,210 @@ function progressView(){
     ${live.map(q=>`<div class="field"><label for="local-${q.n}">Q. ${q.n} ${esc(q.q)}</label><input id="local-${q.n}" data-local="${q.n}" value="${esc(answers(q).join(", "))}"></div>`).join("")}
     <button class="btn ghost" data-act="resetlocal">Restore saved defaults</button>
   </section>
-  <button class="btn ghost" data-act="reset" id="reset-btn">Erase all progress</button>`;
+  <button class="btn ghost" data-act="reset" id="reset-btn">Erase all progress</button>
+  <p class="ver">Civics 128 · v1.1</p>`;
+}
+
+
+// ---------- mastery ----------
+// A "round" is one block of practice (up to 10) or one sample test. Accuracy = right / answered.
+const LEVELS = [[0,"Rookie"],[50,"Contender"],[70,"Interview ready"],[85,"Star-spangled"]];
+const pctOf = (r,n) => n ? Math.round(r/n*100) : 0;
+function pooled(rs){ const r = rs.reduce((t,x)=>t+x.r,0), n = rs.reduce((t,x)=>t+x.r+x.w,0); return {r,n,p:n?r/n*100:null}; }
+function plotRounds(){ return (S.rounds||[]).filter(x=>x.r+x.w>=3); }
+function levelOf(p){ let l = LEVELS[0]; LEVELS.forEach(x=>{ if(p>=x[0]) l = x; }); return l; }
+
+function masteryView(){
+  const all = QUESTIONS.reduce((t,q)=>{ const s=stat(q.n); t.r+=s.right; t.w+=s.wrong; return t; },{r:0,w:0});
+  const totalN = all.r+all.w;
+  const R = plotRounds();
+  const recent = pooled(R.slice(-5)), first = pooled(R.slice(0,3));
+  // Headline uses your last five rounds once you have them, so it moves as you improve
+  const head = recent.n ? recent.p : (totalN ? all.r/totalN*100 : null);
+  const lv = head===null ? null : levelOf(head);
+  const delta = R.length>=4 ? Math.round(recent.p - first.p) : null;
+  const ladder = LEVELS.map((x,i)=>{
+    const on = head!==null && head>=x[0], here = lv && lv[0]===x[0];
+    return `<div class="${on?"on":""} ${here?"here":""}"><i></i>${x[1]}<span>${x[0]}%${i<LEVELS.length-1?"–"+(LEVELS[i+1][0]-1)+"%":"+"}</span></div>`;
+  }).join("");
+
+  const sect = Object.keys(SECT).map(k=>{
+    const t = QUESTIONS.filter(q=>section(q.n)===k).reduce((a,q)=>{ const s=stat(q.n); a.r+=s.right; a.n+=s.right+s.wrong; return a; },{r:0,n:0});
+    return `<div class="meter"><div class="lbl"><span>${SECT[k]}</span><span>${t.n?pctOf(t.r,t.n)+"% · "+t.n+" answered":"Not started"}</span></div><div class="bar"><i style="width:${t.n?pctOf(t.r,t.n):0}%"></i></div></div>`;
+  }).join("");
+
+  // Daily table, newest first
+  const days = {};
+  R.forEach(x=>{ const k = new Date(x.d).toDateString(); (days[k] = days[k]||{d:x.d,r:0,n:0,c:0}); days[k].r+=x.r; days[k].n+=x.r+x.w; days[k].c++; });
+  const dayRows = Object.values(days).sort((a,b)=>b.d-a.d).slice(0,30);
+
+  const base = S.base && S.base.n ? `<p class="small muted">Before this tracker started you had answered ${S.base.n} questions at ${pctOf(S.base.r,S.base.n)}%. The chart begins from your first round after that.</p>` : "";
+
+  return `
+  <h2>Mastery</h2>
+  <section class="panel">
+    <div class="hero-m">
+      <span class="pct">${head===null?"–":Math.round(head)}<small>%</small></span>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        ${lv?`<span class="lvl">★ ${lv[1]}</span>`:""}
+        <span class="small muted">${R.length>=5?"Right answers over your last 5 rounds":R.length?`Right answers across ${R.length} round${R.length>1?"s":""}`:totalN?"Right answers so far":"Answer a round to get your score"}</span>
+      </div>
+    </div>
+    ${delta!==null?`<p class="delta">${delta>=0?`<b class="up">▲ ${delta} pts</b>`:`<b class="down">▼ ${-delta} pts</b>`} <span class="muted">since your first three rounds (${Math.round(first.p)}%)</span></p>`:""}
+    <div class="ladder" aria-label="Levels">${ladder}</div>
+    <p class="small muted">The real interview needs 12 of 20, which is 60%. Aim to live above 85% before your date.</p>
+  </section>
+
+  <section class="panel">
+    <h3>Accuracy by round</h3>
+    <div class="legend"><span><i class="dot"></i>Each round</span><span><i class="ln"></i>5-round average</span><span><i class="pass"></i>Pass mark (60%)</span></div>
+    <div id="mchart">${R.length?"":`<p class="muted small">Finish a round of practice or a sample test and your first point lands here. Every round after that adds one more.</p>`}</div>
+    ${base}
+    ${dayRows.length?`<details class="tbl"><summary>Table view by day</summary><div class="tw"><table><thead><tr><th>Day</th><th>Rounds</th><th>Answered</th><th>Right</th></tr></thead><tbody>${dayRows.map(d=>`<tr><td>${new Date(d.d).toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"})}</td><td>${d.c}</td><td>${d.n}</td><td>${pctOf(d.r,d.n)}%</td></tr>`).join("")}</tbody></table></div></details>`:""}
+  </section>
+
+  <section class="panel"><h3>Accuracy by section</h3><div class="sect-acc">${sect}</div>
+    <p class="small muted">All time, ${totalN} answers: ${all.r} right, ${all.w} wrong.</p></section>`;
+}
+
+// Drawn after render at the container's real pixel width so labels stay crisp on a phone
+function drawChart(){
+  const box = $("#mchart"); const R = plotRounds(); if(!box || !R.length) return;
+  const W = box.clientWidth, H = 220, L = 34, Rm = 10, T = 12, B = 26;
+  const iw = W-L-Rm, ih = H-T-B;
+  const pts = R.map((x,i)=>({i, x:L + (R.length===1? iw/2 : i/(R.length-1)*iw), p:(x.r/(x.r+x.w))*100, r:x}));
+  const y = p => T + (1-p/100)*ih;
+  const avg = pts.map((pt,i)=>{ const w = pooled(R.slice(Math.max(0,i-4), i+1)); return {x:pt.x, p:w.p}; });
+  const grid = [0,20,40,80,100].map(v=>`<line x1="${L}" x2="${W-Rm}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/><text x="${L-8}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="var(--muted)">${v}%</text>`).join("");
+  const pass = `<line x1="${L}" x2="${W-Rm}" y1="${y(60)}" y2="${y(60)}" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="5 4"/><text x="${L-8}" y="${y(60)+4}" text-anchor="end" font-size="11" font-weight="700" fill="var(--ink)">60%</text>`;
+  const line = avg.length>1 ? `<path d="${avg.map((a,i)=>(i?"L":"M")+a.x.toFixed(1)+" "+y(a.p).toFixed(1)).join("")}" fill="none" stroke="var(--series-b)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>` : "";
+  const r = R.length>40 ? 3 : 4.5;
+  const dots = pts.map(pt=>`<circle cx="${pt.x.toFixed(1)}" cy="${y(pt.p).toFixed(1)}" r="${r}" fill="var(--series-a)" stroke="var(--card)" stroke-width="2"/>`).join("");
+  const fmt = d => new Date(d).toLocaleDateString(undefined,{month:"short",day:"numeric"});
+  const xl = `<text x="${pts[0].x}" y="${H-6}" text-anchor="${R.length===1?"middle":"start"}" font-size="11" fill="var(--muted)">${fmt(R[0].d)}</text>` +
+    (R.length>1?`<text x="${pts[pts.length-1].x}" y="${H-6}" text-anchor="end" font-size="11" fill="var(--muted)">${fmt(R[R.length-1].d)}</text>`:"");
+  box.innerHTML = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Accuracy for each of ${R.length} rounds, latest ${Math.round(pts[pts.length-1].p)} percent">
+    ${grid}${pass}${line}${dots}${xl}<line id="mx" x1="0" x2="0" y1="${T}" y2="${T+ih}" stroke="var(--muted)" stroke-width="1" opacity="0"/>
+    <circle id="mh" r="7" fill="none" stroke="var(--series-a)" stroke-width="2" opacity="0"/></svg><div id="mtip" hidden></div>`;
+  const svg = box.querySelector("svg"), tip = $("#mtip"), mx = $("#mx"), mh = $("#mh");
+  const show = e=>{
+    const bx = svg.getBoundingClientRect(), px = e.clientX - bx.left;
+    let best = pts[0]; pts.forEach(pt=>{ if(Math.abs(pt.x-px) < Math.abs(best.x-px)) best = pt; });
+    const a = avg[best.i], x = best.r;
+    mx.setAttribute("x1",best.x); mx.setAttribute("x2",best.x); mx.setAttribute("opacity",".5");
+    mh.setAttribute("cx",best.x); mh.setAttribute("cy",y(best.p)); mh.setAttribute("opacity","1");
+    tip.hidden = false;
+    tip.innerHTML = `<b>${fmt(x.d)} · ${x.kind==="test"?"Sample test":"Practice"}</b><br>${x.r} of ${x.r+x.w} right (${Math.round(best.p)}%)<br>5-round avg ${Math.round(a.p)}%`;
+    tip.style.left = Math.min(Math.max(best.x, 80), W-80)+"px"; tip.style.top = y(best.p)+"px";
+  };
+  const hide = ()=>{ tip.hidden = true; mx.setAttribute("opacity","0"); mh.setAttribute("opacity","0"); };
+  svg.addEventListener("pointermove", show); svg.addEventListener("pointerdown", show); svg.addEventListener("pointerleave", hide);
+}
+let chartW = 0;
+window.addEventListener("resize", ()=>{ const b = $("#mchart"); if(tab==="mastery" && b && b.clientWidth!==chartW){ chartW = b.clientWidth; drawChart(); } });
+
+// ---------- fireworks + flag (splash and celebrations) ----------
+const REDUCED = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+const FW_COLORS = ["#C8102E","#F4F1EA","#5B8DEF","#D9B160","#FF4D5E"];
+
+// Particle engine. trails=true paints a translucent night sky each frame (splash);
+// trails=false clears to transparent (celebration overlay on top of the app).
+function fireworks(canvas, {trails, sky, flag, duration, rate}){
+  const ctx = canvas.getContext("2d");
+  let W, H, dpr, raf, t0 = performance.now(), last = t0, nextLaunch = 0;
+  const rockets = [], sparks = [];
+  const stars = Array.from({length:70},()=>({x:Math.random(),y:Math.random()*.55,r:Math.random()*1.3+.3,p:Math.random()*6}));
+  function size(){
+    dpr = Math.min(window.devicePixelRatio||1, 2);
+    W = canvas.clientWidth; H = canvas.clientHeight;
+    canvas.width = W*dpr; canvas.height = H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    if(trails){ ctx.fillStyle = sky; ctx.fillRect(0,0,W,H); }
+  }
+  size(); window.addEventListener("resize", size);
+
+  function launch(){
+    const c = FW_COLORS[Math.floor(Math.random()*FW_COLORS.length)];
+    rockets.push({x:W*(.15+Math.random()*.7), y:H*(flag?.72:1), vy:-(H*.0105+Math.random()*H*.004), ty:H*(.12+Math.random()*.3), c});
+  }
+  function burst(r){
+    const n = 54 + Math.floor(Math.random()*30), sp = 2.2 + Math.random()*1.8;
+    const c2 = Math.random()<.4 ? FW_COLORS[Math.floor(Math.random()*FW_COLORS.length)] : r.c;
+    for(let i=0;i<n;i++){
+      const a = (i/n)*Math.PI*2 + Math.random()*.1, v = sp*(.55+Math.random()*.6);
+      sparks.push({x:r.x, y:r.y, vx:Math.cos(a)*v, vy:Math.sin(a)*v, life:1, decay:.011+Math.random()*.012, c:i%3?r.c:c2});
+    }
+  }
+  // Waving 7-stripe band along the bottom, red first
+  function drawFlag(t){
+    const top = H*.74, band = H-top, sh = band/7, step = 5;
+    for(let s=0;s<7;s++){
+      ctx.fillStyle = s%2 ? "#F4F1EA" : "#B22234";
+      for(let x=0;x<W;x+=step){
+        const wave = Math.sin(x*.011 - t*2.2)*10*(.35 + x/W*.65);
+        ctx.fillRect(x, top + s*sh + wave, step+1, sh+1);
+      }
+    }
+    ctx.fillStyle = "#D9B160";
+    for(let x=0;x<W;x+=step){ const wave = Math.sin(x*.011 - t*2.2)*10*(.35 + x/W*.65); ctx.fillRect(x, top+wave-3, step+1, 3); }
+  }
+  function frame(now){
+    const dt = Math.min(2.5,(now-last)/16.67), t = (now-t0)/1000; last = now;
+    if(trails){ ctx.fillStyle = "rgba(14,26,51,.22)"; ctx.fillRect(0,0,W,H); }
+    else ctx.clearRect(0,0,W,H);
+    if(trails){
+      for(const s of stars){ ctx.globalAlpha = .35+.35*Math.sin(t*2+s.p); ctx.fillStyle="#F4F1EA"; ctx.beginPath(); ctx.arc(s.x*W,s.y*H,s.r,0,7); ctx.fill(); }
+      ctx.globalAlpha = 1;
+    }
+    const live = !duration || t < duration;
+    if(live && now >= nextLaunch){ launch(); nextLaunch = now + rate*(.6+Math.random()*.8); }
+    for(let i=rockets.length-1;i>=0;i--){
+      const r = rockets[i]; r.y += r.vy*dt;
+      ctx.fillStyle = r.c; ctx.fillRect(r.x-1.5, r.y, 3, 7);
+      if(r.y <= r.ty){ burst(r); rockets.splice(i,1); }
+    }
+    for(let i=sparks.length-1;i>=0;i--){
+      const p = sparks[i];
+      p.vy += .045*dt; p.vx *= .985; p.vy *= .985; p.x += p.vx*dt; p.y += p.vy*dt; p.life -= p.decay*dt;
+      if(p.life<=0){ sparks.splice(i,1); continue; }
+      ctx.globalAlpha = Math.max(0,p.life); ctx.fillStyle = p.c;
+      ctx.beginPath(); ctx.arc(p.x,p.y,1.9,0,7); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    if(flag) drawFlag(t);
+    if(live || rockets.length || sparks.length) raf = requestAnimationFrame(frame);
+    else stop();
+  }
+  function stop(){ cancelAnimationFrame(raf); window.removeEventListener("resize", size); if(!trails) canvas.remove(); }
+  if(REDUCED){ if(flag) drawFlag(0); return {stop}; }
+  raf = requestAnimationFrame(frame);
+  return {stop};
+}
+
+// Short burst over the app for a passed test or a perfect round
+function celebrate(){
+  if(REDUCED) return;
+  const c = document.createElement("canvas"); c.id = "confetti"; document.body.appendChild(c);
+  fireworks(c, {trails:false, flag:false, duration:2.2, rate:260});
+}
+
+function splash(){
+  let seen = false; try{ seen = sessionStorage.getItem("civics128.splash")==="1"; sessionStorage.setItem("civics128.splash","1"); }catch(e){}
+  if(seen) return;
+  const m = QUESTIONS.filter(q=>mastered(q.n)).length;
+  const el = document.createElement("div"); el.id = "splash"; el.setAttribute("role","dialog"); el.setAttribute("aria-label","Welcome");
+  el.innerHTML = `<canvas aria-hidden="true"></canvas><div class="sp">
+    <span class="eyebrow">★ One nation · 128 questions ★</span>
+    <h1>Civics <span>128</span></h1>
+    <p>Every question between you and the oath. Let's earn it.</p>
+    <button type="button" id="splash-go">Let's go</button>
+    <span class="stat">${m ? `${m} of 128 mastered so far` : "2025 USCIS civics test"}</span></div>`;
+  document.body.appendChild(el);
+  const fx = fireworks(el.querySelector("canvas"), {trails:true, sky:"#0E1A33", flag:true, duration:0, rate:520});
+  let gone = false;
+  const close = ()=>{ if(gone) return; gone = true; el.classList.add("out"); setTimeout(()=>{ fx.stop(); el.remove(); }, 520); };
+  el.addEventListener("click", close);
+  document.addEventListener("keydown", function k(e){ if(e.key==="Enter"||e.key==="Escape"||e.key===" "){ close(); document.removeEventListener("keydown",k); } });
+  setTimeout(close, 6000);
 }
 
 // ---------- events ----------
@@ -595,11 +897,13 @@ document.addEventListener("click", e=>{
   else if(act==="test") startQuiz("test");
   else if(act==="reveal"){ quiz.revealed = true; quiz.graded = undefined; render(); }
   else if(act==="next") nextQ();
+  else if(act==="more") keepGoing();
+  else if(act==="mastery") go("mastery");
   else if(act==="quit" || act==="home") go("home");
   else if(act==="resetlocal"){ S.local = {}; save(); render(); }
   else if(act==="reset"){
     if(!resetArmed){ resetArmed = true; b.textContent = "Tap again to erase everything"; b.classList.add("bad"); setTimeout(()=>{resetArmed=false; if(b.isConnected){b.textContent="Erase all progress"; b.classList.remove("bad");}},4000); }
-    else { resetArmed = false; const keep = S.local; S = fresh(); S.local = keep; save(); render(); }
+    else { resetArmed = false; const keep = S.local; S = fresh(); S.local = keep; S.base = {r:0,n:0,d:Date.now()}; save(); render(); }
   }
 });
 document.addEventListener("input", e=>{
@@ -619,7 +923,9 @@ document.addEventListener("keydown", e=>{
 });
 
 render();
+splash();
 })();
 </script>
+
 </body>
 </html>
